@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing App</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .canvas-container {
+            border: 2px solid #000;
+            margin-bottom: 10px;
+        }
+        canvas {
+            background-color: #fff;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        .color-picker, .size-picker {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .color-picker input[type="color"], .size-picker input[type="range"] {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="drawingCanvas" width="800" height="600"></canvas>
+        </div>
+        <div class="controls">
+            <div class="color-picker">
+                <label for="colorPicker">Color:</label>
+                <input type="color" id="colorPicker" value="#000000">
+            </div>
+            <div class="size-picker">
+                <label for="sizePicker">Size:</label>
+                <input type="range" id="sizePicker" min="1" max="50" value="5">
+            </div>
+            <button id="eraser">Eraser</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const sizePicker = document.getElementById('sizePicker');
+        const eraserButton = document.getElementById('eraser');
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let hue = 0;
+        let direction = true;
+        let isEraser = false;
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.strokeStyle = isEraser ? '#ffffff' : colorPicker.value;
+            ctx.lineWidth = sizePicker.value;
+            ctx.lineCap = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        });
+
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+        eraserButton.addEventListener('click', () => {
+            isEraser = !isEraser;
+            eraserButton.textContent = isEraser ? 'Pen' : 'Eraser';
+        });
+    </script>
+</body>
+</html>
