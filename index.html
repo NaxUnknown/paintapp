@@ -232,7 +232,7 @@
     </div>
 
     <script>
-        // DOM Elements
+
         const canvas = document.getElementById('drawing-canvas');
         const ctx = canvas.getContext('2d');
         const colorPicker = document.getElementById('color-picker');
@@ -243,7 +243,7 @@
         const clearBtn = document.getElementById('clear');
         const colorOptions = document.querySelectorAll('.color-option');
         
-        // Variables
+
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
@@ -251,18 +251,18 @@
         let brushSize = 5;
         let isEraser = false;
         
-        // Initialize canvas
+
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         
-        // Functions
+
         function startDrawing(e) {
             isDrawing = true;
             const coords = getCoordinates(e);
             lastX = coords.x;
             lastY = coords.y;
             
-            // Draw a dot at the starting point
+
             ctx.beginPath();
             ctx.arc(lastX, lastY, brushSize / 2, 0, Math.PI * 2);
             ctx.fillStyle = isEraser ? '#FFFFFF' : currentColor;
@@ -317,7 +317,7 @@
                 }
             });
             
-            // Switch to pencil mode when color is changed
+
             if (isEraser) {
                 activatePencil();
             }
@@ -355,31 +355,31 @@
                 const tempCanvas = document.createElement('canvas');
                 const tempCtx = tempCanvas.getContext('2d');
                 
-                // Save current drawing
+
                 tempCanvas.width = canvas.width;
                 tempCanvas.height = canvas.height;
                 tempCtx.drawImage(canvas, 0, 0);
                 
-                // Resize canvas
+
                 canvas.width = maxWidth - 20;
                 canvas.height = canvas.width * ratio;
                 
-                // Restore drawing
+
                 ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
                 
-                // Reset context settings
+
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
             }
         }
         
-        // Event Listeners
+
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
         
-        // Touch support
+
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             startDrawing(e);
@@ -390,7 +390,7 @@
         });
         canvas.addEventListener('touchend', stopDrawing);
         
-        // Color and size controls
+
         colorPicker.addEventListener('input', (e) => {
             setColor(e.target.value);
         });
@@ -403,16 +403,16 @@
         
         sizeSlider.addEventListener('input', updateBrushSize);
         
-        // Tool buttons
+
         eraserBtn.addEventListener('click', activateEraser);
         pencilBtn.addEventListener('click', activatePencil);
         clearBtn.addEventListener('click', clearCanvas);
         
-        // Handle window resize
+
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
         
-        // Initialize
+
         updateBrushSize();
     </script>
 </body>
